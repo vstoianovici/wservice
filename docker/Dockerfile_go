@@ -1,0 +1,15 @@
+FROM golang:1.11
+ 
+RUN mkdir -p /go/src/github.com/vstoianovici/wService
+
+WORKDIR /go/src/github.com/vstoianovici/wService
+
+COPY . .
+ 
+RUN make
+
+WORKDIR /go/src/github.com/vstoianovici/wService/cmd
+
+RUN sed -i -e 's/sqlHost : 127.0.0.1,/sqlHost : postgresdb,/' postgresql.cfg
+  
+ENTRYPOINT ./wService
