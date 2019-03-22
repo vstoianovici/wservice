@@ -1,6 +1,6 @@
 # wService
 
-`Wallet Service or wService` for short provides a generic basic Wallet service with a RESTful API implemented in Go (using go-kit - https://github.com/go-kit/kit) the employs Postgres as a db solution.
+`Wallet Service or wService` for short provides a generic basic Wallet service with a RESTful API implemented in Go (using [gokit.io](https://gokit.io)) the employs Postgres as a db solution.
 
 Here are a few basic functionalities that are covered:
 
@@ -42,7 +42,7 @@ One can visualize both tables by accessing the follwing links:
 
 - The `Account` table: http://127.0.0.1:8080/accounts
 
-- The `Transfers` table http://127.0.0.1:8080/transfers
+- The `Transfers` table: http://127.0.0.1:8080/transfers
 
 - Additionally one can see the `Metrics & Instrumentation` endpoint here: http://127.0.0.1:8080/metrics
 
