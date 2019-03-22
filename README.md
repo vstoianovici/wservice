@@ -1,6 +1,6 @@
 # wService
 
-`Wallet Service or wService` for short provides a generic basic Wallet service with a RESTful API implemented in Go (using the go-kit library/toolkit) the employs Postgres as a db solution.
+`Wallet Service or wService` for short provides a generic basic Wallet service with a RESTful API implemented in Go (using go-kit - https://github.com/go-kit/kit) the employs Postgres as a db solution.
 
 Here are a few basic functionalities that are covered:
 
@@ -22,7 +22,7 @@ Assumptions and requirements:
 Get the source code:
 
 ```
-$ go get -u github.com/vstoianovici/wStart
+$ go get -u github.com/vstoianovici/wservice
 ```
 
 Build the environment from the `docker-compose.yml` file in the root (`gowebapp` and `postgresdb` will be deployed):
@@ -32,11 +32,11 @@ $ docker-compose up -d
 ```
 The `postgresdb` will already have a database called `Postgres` that has the `Accounts` and `Transfers` tables. The `Account` table will look something like this:
 
-poza
+<img width="505" alt="Screenshot 2019-03-22 at 22 53 23" src="https://user-images.githubusercontent.com/26381671/54855623-c959fc80-4cff-11e9-8b92-c0b507c8bc18.png">
 
 while the `Transfers` table will be empty:
 
-poza
+<img width="755" alt="Screenshot 2019-03-22 at 22 54 17" src="https://user-images.githubusercontent.com/26381671/54855611-bcd5a400-4cff-11e9-9dd4-a7f8438ff2c1.png">
 
 One can visualize both tables by accessing the follwing links:
 
@@ -52,7 +52,7 @@ One can visualize both tables by accessing the follwing links:
 Get the source code:
 
 ```
-$ go get -u github.com/vstoianovici/wStart
+$ go get -u github.com/vstoianovici/wservice
 ```
 
 Build the binary by running the following command in the root:
@@ -121,12 +121,15 @@ curl  -d'{"from":"bob123","to":"alice456","amount":"20"}' "127.0.0.1:8080/submit
 ```
 
 The other touchpoints of the API are, as mentioned earlier `/accounts`, `/transfers` and `/metrics` reachable with:
-
+```
 curl "127.0.0.1:8080/transfers"
-
+```
+```
 curl "127.0.0.1:8080/accounts"
-
+```
+```
 curl "127.0.0.1:8080/metics"
+```
 
 
 ### Build your own wallet
