@@ -29,7 +29,6 @@ Build the environment from the `docker-compose.yml` file in the root (`gowebapp`
 
 ```
 $ docker-compose up -d
-
 ```
 The `postgresdb` will already have a database called `Postgres` that has the `Accounts` and `Transfers` tables. The `Account` table will look something like this:
 
@@ -60,7 +59,6 @@ Build the binary by running the following command in the root:
 
 ```
 $ make build
-
 ```
 
 If the build succeeds, the resulting binary named "wService" should be found in the `/cmd` directory.
