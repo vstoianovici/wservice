@@ -1,4 +1,4 @@
-# NNgoClassify
+# wService
 
 `Wallet Service or wService for short` provides a generic basic Wallet service with a RESTful API implemented in Go (using the go-kit library/toolkit) the employs Postgres as a db solution.
 
