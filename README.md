@@ -88,7 +88,7 @@ sqlDbName : postgres,
 sslmode : disable,
 accountsTable : Accounts,
 transfersTable : Transfers
-```yaml
+```
 
 Run the tests:
 
