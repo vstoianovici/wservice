@@ -1,0 +1,26 @@
+version: '3.1'
+services:
+
+  gowebapp:
+    build: 
+      context: .
+      dockerfile: ./docker/Dockerfile_go
+    image: gowebapp
+    restart: always
+    ports:
+      - 8080:8080
+
+  postgresdb:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile_postgres
+    image: postgresdb
+    restart: always
+    environment:
+#      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+#      POSTGRES_DB: bird_encyclopedia
+    #volumes:
+    #  - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+    ports:
+      - 5432:5432
