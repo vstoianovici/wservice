@@ -17,10 +17,6 @@ services:
     image: postgresdb
     restart: always
     environment:
-#      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-#      POSTGRES_DB: bird_encyclopedia
-    #volumes:
-    #  - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
     ports:
       - 5432:5432
