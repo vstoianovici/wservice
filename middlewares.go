@@ -6,7 +6,7 @@ import (
 	"github.com/go-kit/kit/endpoint"
 )
 
-// Middlewares is responsibile for creating the wallet service's endpoints that will be wrapped in addtional functionality with go-kit (HTTP transport, circuit-breaking, ratel imitting middlewares)
+// Middlewares is responsible for creating the wallet service's endpoints that will be wrapped in additional functionality with go-kit (HTTP transport, circuit-breaking, ratel imitting middlewares)
 
 // For each method, we define request struct that is needed by the MakeTransfersEndpoint enpoint constructor (biolerplate)
 type transfersRequest struct {

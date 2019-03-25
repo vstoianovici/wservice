@@ -17,7 +17,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// This is where the core bussiness logic resides (the service layer of the gokit onion) and on top of it we will be layering other functionalities that go-kit helps with
+// This is where the core business logic resides (the service layer of the gokit onion) and on top of it we will be layering other functionalities that go-kit helps with
 
 // WalletService is the inteface to be used from outside the package that provides operations on accounts.
 // GetTable is a method that can be used to get either the Accounts or Transfers table from the Postgres db, basically fetching
@@ -42,7 +42,7 @@ type sqlDBTx struct {
 	transfersTable string
 }
 
-// NewService exported to be accessable from outside the package (from main)
+// NewService exported to be accessible from outside the package (from main)
 // NewService is necessary because we need the ability to create a sqlDBTx stuct from outside the package (like from main)
 func NewService() (WalletService, int, error) {
 	var fileName string
@@ -53,7 +53,7 @@ func NewService() (WalletService, int, error) {
 	flag.IntVar(&portNumber, "port", 8080, "Port on which the server will listen and serve.")
 	flag.Parse()
 
-	// Open Postgres configuraiton file
+	// Open Postgres configuration file
 	file, err := os.Open(fileName)
 	// If there is an error return a suggestive error message
 	if err != nil {
@@ -113,7 +113,7 @@ func (s sqlDBTx) GetTable(t string) ([]string, error) {
 	// Make sure we actually close the connction once we're done
 	defer db.Close()
 
-	// While the transaction we are about to execute is not commited we will retry it until succesful
+	// While the transaction we are about to execute is not committed we will retry it until successful
 	var isCommitted = false
 	var results []string
 	for ok := true; ok; ok = !isCommitted {
@@ -122,7 +122,7 @@ func (s sqlDBTx) GetTable(t string) ([]string, error) {
 		tx, err := db.Begin()
 		// If we get an error return a descriptive message and roll back the transaction in the "defer" section
 		if err != nil {
-			var ErrStartTx = errors.New("err: error begining transaction in postgres")
+			var ErrStartTx = errors.New("err: error beginning transaction in postgres")
 			cErr := errors.New(ErrStartTx.Error() + err.Error())
 			return nil, cErr
 		}
@@ -164,18 +164,18 @@ func (s sqlDBTx) GetTable(t string) ([]string, error) {
 			if err == sql.ErrNoRows {
 				// And if the table has information about accounts
 				if t == s.accountsTable {
-					// Return an apropriate error to the outer function
+					// Return an appropriate error to the outer function
 					var ErrAcc = errors.New("err: there are no defined accounts")
 					cErr := errors.New(ErrAcc.Error() + err.Error())
 					return nil, cErr
 				}
-				// Or, if the table has information about fund transfers return an apropriate error to the outer function
+				// Or, if the table has information about fund transfers return an appropriate error to the outer function
 				var ErrAcc = errors.New("err: there are no defined transfers")
 				cErr := errors.New(ErrAcc.Error() + err.Error())
 				return nil, cErr
 			}
 			// If we got a different error return
-			var ErrUnexp = errors.New("err: Unexpected error occured")
+			var ErrUnexp = errors.New("err: Unexpected error occurred")
 			cErr := errors.New(ErrUnexp.Error() + err.Error())
 			return nil, cErr
 		}
@@ -223,7 +223,7 @@ func (s sqlDBTx) GetTable(t string) ([]string, error) {
 }
 
 // DoTransfer is a sqlDBTx type method that is responsible for the actual fund transfer transaction from one account to another
-// DoTransfer takes in 3 arguments: the source account, the destination account and the transfered amount and returns a confirmation string and an empty error
+// DoTransfer takes in 3 arguments: the source account, the destination account and the transferred amount and returns a confirmation string and an empty error
 // GetTable is also one of core functionalities of the Wallet service and has its own go-kit endpoint
 func (s sqlDBTx) DoTransfer(fromAccount string, toAccount string, transferAmount string) (string, error) {
 	// Based on the information contained on a sqlDBTx struct created with the "NewService" function a DB connection string is defined and a connection is opened
@@ -244,7 +244,7 @@ func (s sqlDBTx) DoTransfer(fromAccount string, toAccount string, transferAmount
 	// Make sure we actually close the connction once we're done
 	defer db.Close()
 
-	// While the transaction we are about to execute is not commited we will retry it until succesful
+	// While the transaction we are about to execute is not committed we will retry it until successful
 	var isCommitted = false
 	for ok := true; ok; ok = !isCommitted {
 		// Start a transaction against the Postgres db
@@ -252,7 +252,7 @@ func (s sqlDBTx) DoTransfer(fromAccount string, toAccount string, transferAmount
 		// If we get an error return a descriptive message and roll back the transaction in the "defer" section, then restart transaction
 		// If at anypoint between the "begin" and "commit" there is an issue all changes to the db will be reverted
 		if err != nil {
-			var ErrStartTx = errors.New("err: error begining transaction in postgres")
+			var ErrStartTx = errors.New("err: error beginning transaction in postgres")
 			cErr := errors.New(ErrStartTx.Error() + err.Error())
 			return "error", cErr
 		}
@@ -297,10 +297,10 @@ func (s sqlDBTx) DoTransfer(fromAccount string, toAccount string, transferAmount
 			return "error", ErrParse
 		}
 
-		// If there is an issue with determining the transfered amout return an appropriate error
+		// If there is an issue with determining the transferred amout return an appropriate error
 		fAmount, err := strconv.ParseFloat(transferAmount, 64)
 		if err != nil {
-			var ErrParse = errors.New("err: error begining transaction in postgres")
+			var ErrParse = errors.New("err: error beginning transaction in postgres")
 			cErr := errors.New(ErrParse.Error() + err.Error())
 			return "error", cErr
 		}
@@ -328,10 +328,10 @@ func (s sqlDBTx) DoTransfer(fromAccount string, toAccount string, transferAmount
 			return "error", ErrMissmatch
 		}
 
-		// Make query to implement in the Account table the substraction of the transfer amount from the source account
+		// Make query to implement in the Account table the subtraction of the transfer amount from the source account
 		txString = "UPDATE " + s.accountsTable + " SET balance = balance - " + transferAmount + " WHERE accountid = '" + fromAccount + "';"
 		_, err = tx.Exec(txString)
-		// In case of failures return apropriate error messages
+		// In case of failures return appropriate error messages
 		if err != nil {
 			if strings.Contains(err.Error(), "could not serialize access due to") {
 				log.Println(err, "...continuing...")
@@ -356,8 +356,8 @@ func (s sqlDBTx) DoTransfer(fromAccount string, toAccount string, transferAmount
 			return "error", err
 		}
 		t0 := time.Now().Format(time.RFC3339)
-		// Insert into the table responsibile for tracking transactions the information about this particular transfer:
-		// Transaction ID, Source account, Destination Account, Amount transfered, Currency of amount transfered and Timestamp of transaction
+		// Insert into the table responsible for tracking transactions the information about this particular transfer:
+		// Transaction ID, Source account, Destination Account, Amount transferred, Currency of amount transferred and Timestamp of transaction
 		txString = "INSERT INTO " + s.transfersTable + " (transid, From_Account, To_Account, Amount, Currency, TTime) VALUES( nextval('Payment_counter'), '" + fromAccount + "', '" + toAccount + "', '" + transferAmount + "', '" + sCurrency + "', '" + t0 + "' );"
 		_, err = tx.Exec(txString)
 
@@ -371,7 +371,7 @@ func (s sqlDBTx) DoTransfer(fromAccount string, toAccount string, transferAmount
 			}
 		}
 		// If we've gotten this far without any errors we can commit our transaction, break out of the transaction loop as the transaction was successful
-		// and return an apropriate status mesage with a nil error
+		// and return an appropriate status mesage with a nil error
 		tx.Commit()
 		isCommitted = true
 	}

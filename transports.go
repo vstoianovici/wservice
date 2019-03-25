@@ -12,7 +12,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-// Transports exposes the wallet service API to the network via JSON over HTTP. As a future extension gRPC could also be introduced for inter-service commuincation.
+// Transports exposes the wallet service API to the network via JSON over HTTP. As a future extension gRPC could also be introduced for inter-service communications.
 
 // NewHTTPTransport creates a new JSON over HTTP transport
 func NewHTTPTransport(svc WalletService) http.Handler {
@@ -44,7 +44,7 @@ func NewHTTPTransport(svc WalletService) http.Handler {
 	return r
 }
 
-// DecodeTransfersRequest exported to be accessable from outside the package (from main)
+// DecodeTransfersRequest exported to be accessible from outside the package (from main)
 func DecodeTransfersRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	if r.Method == http.MethodGet {
 		return nil, nil
@@ -53,7 +53,7 @@ func DecodeTransfersRequest(_ context.Context, r *http.Request) (interface{}, er
 	return nil, ErrVerb
 }
 
-// DecodeAccountsRequest exported to be accessable from outside the package (from main)
+// DecodeAccountsRequest exported to be accessible from outside the package (from main)
 func DecodeAccountsRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	if r.Method == http.MethodGet {
 		return nil, nil
@@ -62,7 +62,7 @@ func DecodeAccountsRequest(_ context.Context, r *http.Request) (interface{}, err
 	return nil, ErrVerb
 }
 
-// DecodeSubmitTransferRequest exported to be accessable from outside the package (from main)
+// DecodeSubmitTransferRequest exported to be accessible from outside the package (from main)
 func DecodeSubmitTransferRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	if r.Method != http.MethodPost {
 		var ErrVerb = errors.New("err: Verb can only be \"POST\" for endpoint \"/submittransfer\"")
@@ -76,7 +76,7 @@ func DecodeSubmitTransferRequest(_ context.Context, r *http.Request) (interface{
 	return request, nil
 }
 
-// EncodeResponse exported to be accessable from outside the package (from main)
+// EncodeResponse exported to be accessible from outside the package (from main)
 func EncodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	return json.NewEncoder(w).Encode(response)
 }
