@@ -57,6 +57,12 @@
 			"revisionTime": "2019-02-28T15:19:29Z"
 		},
 		{
+			"checksumSHA1": "9YQYg2PkA7lkFuUyCQGUv0vX5zA=",
+			"path": "github.com/gorilla/mux",
+			"revision": "8559a4f775fc329165fe32bd4c2543de8ada8fce",
+			"revisionTime": "2019-02-17T15:38:49Z"
+		},
+		{
 			"checksumSHA1": "SVzanxaLYK43jeNWQqNs5P+uhow=",
 			"path": "github.com/jmoiron/sqlx",
 			"revision": "82935fac6c1a317907c8f43ed3f7f85ea844a78b",

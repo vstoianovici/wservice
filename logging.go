@@ -6,12 +6,15 @@ import (
 	"github.com/go-kit/kit/log"
 )
 
+// The logging middleware amends the wallet service with a logger
+
+// loggingMiddleware is the type of the wrapper around the core service and any other functionality layers
 type loggingMiddleware struct {
 	logger log.Logger
 	next   WalletService
 }
 
-// NewLogging is exported to be used in main
+// NewLogging is how the logging middleware (loggingMiddleware struct) is constructed (the function is exported so it can be used from outside the package)
 func NewLogging(logger log.Logger, next WalletService) WalletService {
 	return &loggingMiddleware{
 		logger: logger,
@@ -19,7 +22,9 @@ func NewLogging(logger log.Logger, next WalletService) WalletService {
 	}
 }
 
+// GetTable function is implemented for logging layer as the request traverses through the logging layer down to the next layer
 func (mw loggingMiddleware) GetTable(s string) (output []string, err error) {
+	// Log everything that the function sees in the provided format
 	defer func(begin time.Time) {
 		status := func(in []string) string {
 			if len(in) != 0 {
@@ -36,13 +41,14 @@ func (mw loggingMiddleware) GetTable(s string) (output []string, err error) {
 			"took", time.Since(begin),
 		)
 	}(time.Now())
-
+	// The function calls the next layer down
 	output, err = mw.next.GetTable(s)
 	return
 }
 
-// DoTransfer exported to be accessable from outside the package (from main)
+// DoTransfer function is implemented for the logging layer as the request traverses through the logging layer down to the next layer
 func (mw loggingMiddleware) DoTransfer(s string, t string, v string) (output string, err error) {
+	// Log everything that the function sees in the provided format
 	defer func(begin time.Time) {
 		_ = mw.logger.Log(
 			"method", "doTransfer",
@@ -52,6 +58,7 @@ func (mw loggingMiddleware) DoTransfer(s string, t string, v string) (output str
 			"took", time.Since(begin),
 		)
 	}(time.Now())
+	// The function calls the next layer down
 	output, err = mw.next.DoTransfer(s, t, v)
 	return
 }
