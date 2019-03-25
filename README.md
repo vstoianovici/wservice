@@ -1,18 +1,20 @@
 # wService
 
-`Wallet Service or wService` for short provides a generic basic Wallet service with a RESTful API implemented in Go (using [gokit.io](https://gokit.io)) the employs Postgres as a db solution.
+`Wallet Service or wService` for short provides a generic basic Wallet service with a RESTful API to visualise balance and move funds according to the approrpiate accounts that was implemented in Go (using [gokit.io](https://gokit.io)) that employs Postgres as a db solution.
+I used Gokit to help us separate concerns by employing an onion layered model, where at the very core we have our use cases or bussines domain (source code dependencies can only point inward) and then wrapping that with other functionality layers such as transport (http, JSON, gRPC), logging, metrics & monitoring...and the list can be extended to service discovery, rate limitting, circuit breaking, alerting, etc.
 
-Here are a few basic functionalities that are covered:
+Here are the core functionalities that our service implements:
 
+- Seeing all available accounts
 - Sending a payment from one account to another (same currency)
 - Seeing all comitted payments since the initial balance value
-- Seeing all available accounts
 
-Assumptions and requirements:
+Assumptions and contraints:
 
 - Only payments within the same currency are supported (no exchanges)
 - There are no users in the system (no auth)
 - Balance can't go below zero
+- There will be no transactions withing the same account
 - More than one instance of the application can be launched
 
 
@@ -45,6 +47,8 @@ One can visualize both tables by accessing the follwing links:
 - The `Transfers` table: http://127.0.0.1:8080/transfers
 
 - Additionally one can see the `Metrics & Instrumentation` endpoint here: http://127.0.0.1:8080/metrics
+
+At this point one could proceed to the Runtime section from below and focus on the sections about the curl commands that allow you to interact with the service (ignore the part where `wservice` is launched, as that is only for those who don't use docker to deploy the service)
 
 
 ## Get started with building the Go binary and deploying a postgres DB
@@ -100,9 +104,7 @@ Feel free to explore the `Makefile` available in the root directory.
 
 ### Runtime
 
-If you went the docker-compose route you can just skip to the below curl commands.
-
-Otherwise, once `wService` is built and ready for runtime it can run (/cmd/wService) without any parameters (default should be fine) but there is the option of passing in a different port or a different `postgres.cfg` file:
+- Otherwise, once `wService` is built and ready for runtime it can run (/cmd/wService) without any parameters (default should be fine) but there is the option of passing in a different port or a different `postgres.cfg` file (skip this step if you deploying with docker-compose and continue to the curl commands):
 
 ```
 $ ./wService -h
@@ -114,13 +116,13 @@ Usage of ./wService:
         Port on which the server will listen and serve. (default 8080)
 ```
 
-At runtime the easiest way to actually create fund transfers is to run a curl command against the `submittransfer` API endpoint such as the following:
+- At runtime the easiest way to actually create fund transfers is to run a curl command against the `submittransfer` API endpoint such as the following:
 
 ```
 curl  -d'{"from":"bob123","to":"alice456","amount":"20"}' "127.0.0.1:8080/submittransfer"
 ```
 
-The other touchpoints of the API are, as mentioned earlier `/accounts`, `/transfers` and `/metrics` reachable with:
+- The other touchpoints of the API to visualize the accounts' balance (`/accounts`,), the already submitted transactions (`/transfers`) and the metrics data (`/metrics`) are, as mentioned earlier reachable with:
 ```
 curl "127.0.0.1:8080/transfers"
 ```
@@ -138,3 +140,11 @@ Anybody can use this resource as a library to create their own implementation of
 
 For the future, a nice feature to implement would be a gRPC endpoint in addition to the Json over HTTP REST API so that the wallet can be a service in a microservice architecture solution.
 
+### Contribute
+
+Contributions to this project are welcome, though please file an issue before starting work on anything major.
+The next step in the evolution of this product would be a gRPC Transport wrapper to allow for optimum inter-process commuinication
+
+### License
+
+The MIT License (MIT) - see the LICENSE file for more details
