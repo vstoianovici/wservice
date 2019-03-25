@@ -1,9 +1,9 @@
 # wService
 
-`Wallet Service or wService` for short provides a generic basic Wallet service with a RESTful API to visualise balance and move funds according to the approrpiate accounts that was implemented in Go (using [gokit.io](https://gokit.io)) that employs Postgres as a db solution.
+`Wallet Service or wService` for short, provides a generic basic Wallet service with a RESTful API to visualise balance and move funds according to the approrpiate accounts that was implemented in Go (using [gokit.io](https://gokit.io)) that employs Postgres as a db solution.
 I used Gokit to help us separate concerns by employing an onion layered model, where at the very core we have our use cases or bussines domain (source code dependencies can only point inward) and then wrapping that with other functionality layers such as transport (http, JSON, gRPC), logging, metrics & monitoring...and the list can be extended to service discovery, rate limitting, circuit breaking, alerting, etc.
 
-Here are the core functionalities that our service implements:
+Here are the core functionalities that this service implements:
 
 - Seeing all available accounts
 - Sending a payment from one account to another (same currency)
@@ -77,7 +77,7 @@ followed by
 ```
 docker run --rm --name postgresdb -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgresdb
 ```
-In case Postgres is installed in any other way other than the ones described above the user needs to create a database named `Postgres` and run the SQL queries contained in the init-user-db.sh script from the `/docker` folder.
+In case Postgres is installed in any other way other than the ones described above the user needs to create a database named `Postgres` and run the SQL queries contained in the `init-user-db.sh script` from the `/docker` folder to create the tables `Accounts` and `Transfers` as portrayed in the screenshots from the section "Get strated with Docker" from above.
 
 
 Addtionally there is a `postgresql.cfg` file contained in `/cmd` that is used for configuring the connection between the Go webapp and the Postgres db. The content is pretty self-explanatory:
@@ -104,7 +104,7 @@ Feel free to explore the `Makefile` available in the root directory.
 
 ### Runtime
 
-- Otherwise, once `wService` is built and ready for runtime it can run (/cmd/wService) without any parameters (default should be fine) but there is the option of passing in a different port or a different `postgres.cfg` file (skip this step if you deploying with docker-compose and continue to the curl commands):
+- Otherwise, once `wService` is built and ready for runtime it can run (/cmd/wService) without any parameters (default should be fine) but there is the option of passing in a different port or a different `postgres.cfg` file (skip this step, if you are deploying with docker-compose, and continue to the curl commands bellow):
 
 ```
 $ ./wService -h
