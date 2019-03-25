@@ -19,8 +19,9 @@ import (
 
 // This is where the core bussiness logic resides (the service layer of the gokit onion) and on top of it we will be layering other functionalities that go-kit helps with
 
-// WalletService is the inteface to be used from outside the package that provides
-// operations on accounts.
+// WalletService is the inteface to be used from outside the package that provides operations on accounts.
+// GetTable is a method that can be used to get either the Accounts or Transfers table from the Postgres db, basically fetching the information about accounts or about all registered transfes
+// DoTransfer is the method that actually implements the wallet's fund transfer functionality from one account to another
 type WalletService interface {
 	GetTable(string) ([]string, error)
 	DoTransfer(string, string, string) (string, error)
