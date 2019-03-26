@@ -49,7 +49,7 @@ func TestGetTable(t *testing.T) {
 	vSlice, err = svc.GetTable("Transfers")
 	assert.Contains(t, vSlice, "Success.")
 	assert.Nil(t, err)
-	vSlice, err = svc.GetTable("SomeOtherTable")
+	vSlice, err = svc.GetTable("someOtherTable")
 	assert.NotContains(t, vSlice, "[]")
 }
 
