@@ -9,6 +9,13 @@
 			"revisionTime": "2018-03-21T16:47:47Z"
 		},
 		{
+			"checksumSHA1": "dvabztWVQX8f6oMLRyv4dLH+TGY=",
+			"origin": "github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew",
+			"path": "github.com/davecgh/go-spew/spew",
+			"revision": "34c6fa2dc70986bccbbffcc6130f6920a924b075",
+			"revisionTime": "2019-03-04T09:57:49Z"
+		},
+		{
 			"checksumSHA1": "oqtNI+0KmQ+eZgH5FArkETtOoHE=",
 			"path": "github.com/go-kit/kit/endpoint",
 			"revision": "90f6ad6713179be44173ca30e60605858ea7e991",
@@ -93,6 +100,13 @@
 			"revisionTime": "2018-12-31T17:19:20Z"
 		},
 		{
+			"checksumSHA1": "LuFv4/jlrmFNnDb/5SCSEPAM9vU=",
+			"origin": "github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib",
+			"path": "github.com/pmezard/go-difflib/difflib",
+			"revision": "34c6fa2dc70986bccbbffcc6130f6920a924b075",
+			"revisionTime": "2019-03-04T09:57:49Z"
+		},
+		{
 			"checksumSHA1": "gQVcoum3Wk1rKcUtaLOoZojxeLI=",
 			"path": "github.com/prometheus/client_golang/prometheus",
 			"revision": "c5e14697eaa7af985b2e326f1f5ed50bacb75c06",
@@ -163,6 +177,12 @@
 			"path": "github.com/prometheus/procfs/xfs",
 			"revision": "d0f344d83b0c80a1bc03b547a2374a9ec6711144",
 			"revisionTime": "2019-03-06T23:32:01Z"
+		},
+		{
+			"checksumSHA1": "IIsn0Wdi5rHU8xca+FzDd+YeYlc=",
+			"path": "github.com/stretchr/testify/assert",
+			"revision": "34c6fa2dc70986bccbbffcc6130f6920a924b075",
+			"revisionTime": "2019-03-04T09:57:49Z"
 		}
 	],
 	"rootPath": "github.com/vstoianovici/wservice"

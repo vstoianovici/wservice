@@ -21,8 +21,10 @@ import (
 
 // WalletService is the inteface to be used from outside the package that provides operations on accounts.
 // GetTable is a method that can be used to get either the Accounts or Transfers table from the Postgres db, basically fetching
-// the information about accounts or about all registered transfes.
-// DoTransfer is the method that actually implements the wallet's fund transfer functionality from one account to another
+// the information about accounts or about all registered transfes. It takes an input sting as the name of the table (Accounts or Tansfers) and return a slice of strings containing
+// all the entries in the specific table and a error (nil if the method ran successfully)
+// DoTransfer is the method that actually implements the wallet's fund transfer functionality from one account to another. It takes 3 input strings (the source account,
+// the destination account and the transferred amount) and returns a status string (like "successful") and an error.
 type WalletService interface {
 	GetTable(string) ([]string, error)
 	DoTransfer(string, string, string) (string, error)
@@ -42,9 +44,7 @@ type sqlDBTx struct {
 	transfersTable string
 }
 
-// NewService exported to be accessible from outside the package (from main)
-// NewService is necessary because we need the ability to create a sqlDBTx stuct from outside the package (like from main)
-func NewService() (WalletService, int, error) {
+func parseArgs() (string, int) {
 	var fileName string
 	// Parse the postrgres configuration file name and path. if not deifned the default is "postgresql.cfg" from /cmd
 	flag.StringVar(&fileName, "file", "./postgresql.cfg", "Path of postgresql config file to be parsed.")
@@ -52,7 +52,10 @@ func NewService() (WalletService, int, error) {
 	// Parse the port number that the server uses to listen and serve. If none is defined the default is 8080
 	flag.IntVar(&portNumber, "port", 8080, "Port on which the server will listen and serve.")
 	flag.Parse()
+	return fileName, portNumber
+}
 
+func getDbConfig(fileName string) (WalletService, error) {
 	// Open Postgres configuration file
 	file, err := os.Open(fileName)
 	// If there is an error return a suggestive error message
@@ -61,7 +64,7 @@ func NewService() (WalletService, int, error) {
 		var ErrReadFile = errors.New(sError)
 		cErr := errors.New(ErrReadFile.Error() + err.Error())
 		var d = sqlDBTx{}
-		return d, portNumber, cErr
+		return d, cErr
 	}
 	// Defering the file closure to make sure it will eventually be closed
 	defer file.Close()
@@ -72,16 +75,36 @@ func NewService() (WalletService, int, error) {
 	// the separtor by another spearator (",") and keep the string to the left of separator
 	cSlice := []string{}
 	scanner := bufio.NewScanner(file)
+	counter := 0
 	for scanner.Scan() {
 		item := scanner.Text()
+		if strings.Index(item, " : ") == -1 {
+			// Check if there is actually a " : " delimiter on the line, if not then there is a formating issue
+			var d = sqlDBTx{}
+			var ErrFormat = errors.New("err: postgres config file error, no ' : ' delimiter found")
+			return d, ErrFormat
+		}
+		if strings.LastIndex(item, " : ") != strings.Index(item, " : ") {
+			// Check if there are more than one " : " delimiter on the line, if so then there is a formating issue
+			var d = sqlDBTx{}
+			var ErrFormat = errors.New("err: postgres config file error, too many ' : ' delimiters found")
+			return d, ErrFormat
+		}
 		s := strings.Split(item, " : ")
 		v := strings.Split(s[1], ",")
 		cSlice = append(cSlice, v[0])
+		counter++
+	}
+	// If there are more or less than 9 lines in the config file, then there is a fomatting issue
+	if counter != 9 {
+		var d = sqlDBTx{}
+		var ErrFormat = errors.New("err: postgres config file error, the number of lines in the config file is not the expected one (9)")
+		return d, ErrFormat
 	}
 	// In case of error return the message to the outer function
 	if err := scanner.Err(); err != nil {
 		var d = sqlDBTx{}
-		return d, portNumber, err
+		return d, err
 	}
 	// Assign the gathered values to the configStruct struct of type sqlDBTx
 	configStruct = sqlDBTx{
@@ -95,8 +118,20 @@ func NewService() (WalletService, int, error) {
 		accountsTable:  cSlice[7],
 		transfersTable: cSlice[8],
 	}
+	return configStruct, nil
+
+}
+
+// NewService exported to be accessible from outside the package (from main)
+// NewService is necessary because we need the ability to create a sqlDBTx stuct from outside the package (like from main)
+func NewService() (WalletService, int, error) {
+
+	// Call function to parse cli arguments
+	fileName, portNumber := parseArgs()
+	configStruct, err := getDbConfig(fileName)
+
 	// Return the sqlDBTx struct that holds the Postgres db configuration parameters and the Listen and Serve port number
-	return configStruct, portNumber, nil
+	return configStruct, portNumber, err
 }
 
 // GetTable is a sqlDBTx type method and its purpose is to fetch the information contained in one of the 2 tables
@@ -140,7 +175,7 @@ func (s sqlDBTx) GetTable(t string) ([]string, error) {
 		_, err = tx.Exec("LOCK TABLE Accounts IN SHARE ROW EXCLUSIVE MODE;") // <=== Lock table
 		// If an error occurs we retry the transaction
 		if err != nil {
-			log.Println(err, "...continuing...")
+			//log.Println(err, "...continuing...")
 			continue
 		}
 
@@ -219,6 +254,10 @@ func (s sqlDBTx) GetTable(t string) ([]string, error) {
 		tx.Commit()
 		isCommitted = true
 	}
+	if t == s.transfersTable && len(results) == 0 {
+		results = append(results, "No submitted transfers yet, this is not an error.")
+	}
+	results = append(results, "Success.")
 	return results, nil
 }
 
@@ -266,7 +305,7 @@ func (s sqlDBTx) DoTransfer(fromAccount string, toAccount string, transferAmount
 			return "error", err
 		}
 
-		// Set a table lock so we exclude any type of conflicts that could generate data corruption
+		// // Set a table lock so we exclude any type of conflicts that could generate data corruption
 		_, err = tx.Exec("LOCK TABLE Accounts IN SHARE ROW EXCLUSIVE MODE;") // <=== Lock table
 		// If an error occurs we retry the transaction
 		if err != nil {

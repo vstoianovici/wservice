@@ -6,10 +6,13 @@ all: build
 build:
 	@cd $(BUILDPATH); $(BUILD) -v -o ./wService
 
+test:
+	@go test
+
 clean:
 	@rm -f $(BUILDPATH)/wService
 
-.PHONY: all build clean
+.PHONY: all build clean test
 
 
 
