@@ -70,8 +70,8 @@ script:
   - docker-compose version
   - docker-compose up -d
   - docker ps
-  - curl "127.0.0.1:8080/transfers"
-  - curl "127.0.0.1:8080/accounts"
+  - curl "0.0.0.0:8080/transfers"
+  - curl "0.0.0.0:8080/accounts"
   - curl  -d'{"from":"bob123","to":"alice456","amount":"20"}' "127.0.0.1:8080/submittransfer"
-  - curl "127.0.0.1:8080/transfers"
-  - curl "127.0.0.1:8080/accounts" 
+  - curl "0.0.0.0:8080/transfers"
+  - curl "0.0.0.0:8080/accounts" 
