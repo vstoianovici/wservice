@@ -1,10 +1,3 @@
-sudo: required
-
-language: go
-
-services:
-    - docker version
-    - docker-compose version
 language: go
 sudo: required
 cache: bundler
