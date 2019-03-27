@@ -33,7 +33,6 @@
  
 * **Error Response:**
 
-
   * **Code:** 200 <br />
     **Content:** `{"v":null,"err":"err: error begining transaction in postgresdial tcp 127.0.0.1:5432: connect: connection refused"}`
 
@@ -91,16 +90,16 @@
   * **Code:** 200 <br />
     **Content:** `{"v":null,"err":"err: error begining transaction in postgresdial tcp 127.0.0.1:5432: connect: connection refused"}`
 
-  OR
+    OR
 
   * **Code:** 200 <br />
     **Content:** `{"v":null,"err":"err: error begining transaction in postgrespq: sorry, too many clients already"}`
     
-  OR
+    OR
 
   * `Failed to connect to 127.0.0.1 port 8080: Connection refused`
   
-  OR
+    OR
 
   * **Code:** 404 <br />
     **Content:** `404 page not found`
@@ -145,16 +144,16 @@
   * **Code:** 200 <br />
     **Content:** `{"v":null,"err":"err: error begining transaction in postgresdial tcp 127.0.0.1:5432: connect: connection refused"}`
 
-  OR
+    OR
 
   * **Code:** 200 <br />
     **Content:** `{"v":null,"err":"err: error begining transaction in postgrespq: sorry, too many clients already"}`
     
-  OR
+    OR
 
   * `Failed to connect to 127.0.0.1 port 8080: Connection refused`
   
-  OR
+    OR
 
   * **Code:** 404 <br />
     **Content:** `404 page not found`
