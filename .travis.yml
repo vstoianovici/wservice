@@ -79,3 +79,5 @@ script:
   - curl "0.0.0.0:8080/transfers"
   - curl "0.0.0.0:8080/accounts"
   - make test
+  - curl "0.0.0.0:8080/transfers"
+  - curl "0.0.0.0:8080/accounts"
