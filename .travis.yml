@@ -26,7 +26,9 @@ before_install:
   # docker-composer we will install next. The messy options are to force it to
   # be non-interactive (normally it asks you a bunch of config questions).
   - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-ce
-
+  - sudo service postgresql status
+  - lsof -Pi :5432 -sTCP:LISTEN
+  
   # Let's stop postgresql
   - sudo service postgresql stop
   # wait for postgresql to shutdown
