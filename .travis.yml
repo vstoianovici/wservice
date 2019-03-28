@@ -30,11 +30,10 @@ before_install:
   # do not need the following steps.
   - docker-compose --version
 
-  # As of the writing of this script Travis has docker-compose v1.4.2, we need
-  # to update it to 1.8+. $DOCKER_COMPOSE_VERSION is provide from the `env`
-  # above.
+  # Remove old version of docker-compose
   - sudo rm /usr/local/bin/docker-compose
 
+  # Install ${DOCKER_COMPOSE_VERSION} version of docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
@@ -71,6 +70,8 @@ script:
   - curl  -d'{"from":"bob123","to":"alice456","amount":"20"}' "127.0.0.1:8080/submittransfer"
   - curl "0.0.0.0:8080/transfers"
   - curl "0.0.0.0:8080/accounts"
+  
+  # Run go tests 
   - make test
   - curl "0.0.0.0:8080/transfers"
   - curl "0.0.0.0:8080/accounts"
