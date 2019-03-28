@@ -7,7 +7,7 @@ build:
 	@cd $(BUILDPATH); $(BUILD) -v -o ./wService
 
 test:
-	@go test
+	@go test -v; cd $(BUILDPATH); go test -v
 
 clean:
 	@rm -f $(BUILDPATH)/wService
